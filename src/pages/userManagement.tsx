@@ -82,7 +82,7 @@ export const UserManagement = () => {
                     <SearchField onSearchChange={setSearchUser} />
                 </div>
 
-                <div className="flex flex-wrap justify-between gap-[21px]">
+                <div className="flex flex-wrap gap-[21px]">
                     {searchedUsers.map((value) => (
                         <div
                             key={value.id}
