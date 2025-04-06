@@ -3,10 +3,11 @@ interface Props {
     variant: "primary" | "secondary" | "danger";
     onClick?: () => void;
     paddingY?: string
+    width?: string
 }
 
-export const ActionBtn = ({ label, variant, onClick, paddingY }: Props) => {
-    const baseClasses = `w-fit py-${paddingY} p-[10px] rounded-[5px] text-[15px] font-semibold cursor-pointer transition-colors duration-200`;
+export const ActionBtn = ({ label, variant, onClick, paddingY, width }: Props) => {
+    const baseClasses = `w-${width} py-${paddingY} p-[10px] rounded-[5px] text-[15px] font-semibold cursor-pointer transition-colors duration-200`;
     const variantClasses = {
         primary: `
           bg-white 

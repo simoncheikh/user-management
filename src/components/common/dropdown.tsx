@@ -29,7 +29,6 @@ export const Dropdown = ({
     const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         if (value && items.length > 0) {
             const matchedItem = items.find(item => item.value === value);
@@ -59,7 +58,7 @@ export const Dropdown = ({
                 <img className="w-5" src={downIcon} alt="dropdown arrow" />
             </div>
 
-            {/* Dropdown list */}
+            {/*Dropdown list*/}
             {isOpen && (
                 <div className="absolute w-full max-h-48 overflow-y-auto mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
                     {items.map(item => (
@@ -78,7 +77,7 @@ export const Dropdown = ({
 
             {/* Error label */}
             {variant === "danger" && (
-                <div className="text-red-500 mt-1 text-sm">{errorLabel}</div>
+                <div className="text-red-500">{errorLabel}</div>
             )}
         </div>
     );
