@@ -1,6 +1,6 @@
 import '../../styles/components/layout/topBar.module.css';
-import { ActionBtn } from '../common/actionBtn';
-import { IconBtn } from '../common/iconBtn';
+import { ActionBtn } from '../atoms/actionBtn';
+import { IconBtn } from '../atoms/iconBtn';
 import moonIcon from '../../assets/moon.png';
 import { useState } from 'react';
 import { SideBar } from './sideBar';
@@ -12,7 +12,7 @@ interface Props {
     isDarkMode: boolean;
 }
 
-export const TopBar = ({ CreateOnClick, setIsDarkMode, isDarkMode = true }: Props) => {
+export const NavBar = ({ CreateOnClick, setIsDarkMode, isDarkMode = true }: Props) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);

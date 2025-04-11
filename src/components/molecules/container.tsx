@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { ActionBtn } from "../common/actionBtn"
-import { TextField } from "../common/textfield"
-import { Dropdown } from "../common/dropdown";
+import { ActionBtn } from "../atoms/actionBtn"
+import { TextField } from "../atoms/Textfield/Textfield"
+import { Dropdown } from "../atoms/dropdown";
 
 interface Props {
     cancelOnClick: () => void;

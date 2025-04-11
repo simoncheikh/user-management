@@ -1,5 +1,5 @@
-import { ActionBtn } from '../common/actionBtn';
-import { IconBtn } from '../common/iconBtn';
+import { ActionBtn } from '../atoms/actionBtn';
+import { IconBtn } from '../atoms/iconBtn';
 import moonIcon from '../../assets/moon.png';
 
 interface SideBarProps {

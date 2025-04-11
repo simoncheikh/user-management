@@ -1,4 +1,4 @@
-import { ActionBtn } from "../common/actionBtn";
+import { ActionBtn } from "../atoms/actionBtn";
 
 interface Props {
     firstName: string,

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { SearchField } from "../components/common/searchField";
-import { TopBar } from "../components/layout/topBar";
-import { UserCard } from "../components/ui/userCard";
-import { Container } from "../components/layout/container";
+import { SearchField } from "../components/atoms/searchField";
+import { NavBar } from "../components/molecules/NavBar";
+import { UserCard } from "../components/organisms/userCard";
+import { Container } from "../components/molecules/container";
 
 export const UserManagement = () => {
     interface userData {
@@ -84,7 +84,7 @@ export const UserManagement = () => {
 
     return (
         <div className={`${isDarkMode == true ? "bg-gray-700" : "bg-white"} min-h-screen flex flex-col`}>
-            <TopBar CreateOnClick={handleCreateUserClick} setIsDarkMode={(e: boolean) => setIsDarkMode(e)} isDarkMode={isDarkMode} />
+            <NavBar CreateOnClick={handleCreateUserClick} setIsDarkMode={(e: boolean) => setIsDarkMode(e)} isDarkMode={isDarkMode} />
             <div className="p-[1%] flex flex-col gap-[20px]">
                 <div className="w-[300px]">
                     <SearchField onSearchChange={setSearchUser} />
