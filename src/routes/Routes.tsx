@@ -8,6 +8,8 @@ import {
 } from "react-router";
 
 import { routeNames } from "../constants/routeNames";
+import { AuthenticationRoute } from "./AuthenticationRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 
 const LoginPage = React.lazy(() =>
@@ -26,15 +28,19 @@ export const Routes = () => {
     return createBrowserRouter(
       createRoutesFromElements(
         <Route errorElement={<></>}>
-          <Route
-            path={routeNames.login}
-            element={<LoginPage />}
-          />
-          <Route
-            path={routeNames.dashboard}
-            element={<Dashboard />}
-          />
-        </Route>
+          <AuthenticationRoute>
+            <Route
+              path={routeNames.login}
+              element={<LoginPage />}
+            />
+          </AuthenticationRoute>
+          <ProtectedRoute>
+            <Route
+              path={routeNames.dashboard}
+              element={<Dashboard />}
+            />
+          </ProtectedRoute>
+        </Route >
       )
     );
   }, []);
