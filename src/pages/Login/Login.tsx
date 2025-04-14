@@ -39,7 +39,7 @@ export const Login = () => {
           }
         } catch (err) {
           console.error(err);
-          setError('Something went wrong. Please try again.');
+          setError('Fill required fields');
         } finally {
           setLoading(false);
         }
