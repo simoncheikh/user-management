@@ -1,21 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import downIcon from '../../assets/down.png';
+import downIcon from '../../../assets/down.png';
+import { DropdownVariant,DropdownItem,DropdownProps } from './Dropdown.type';
 
-interface DropdownItem {
-    id: number;
-    label: string;
-    value: string;
-}
-
-interface DropdownProps {
-    items?: DropdownItem[];
-    placeholder?: string;
-    onSelect?: (item: DropdownItem) => void;
-    width?: string;
-    variant?: 'primary' | 'danger';
-    errorLabel?: string;
-    value?: string
-}
 
 export const Dropdown = ({
     items = [],
@@ -49,7 +35,7 @@ export const Dropdown = ({
             {/* Dropdown header */}
             <div
                 className={`flex items-center justify-between p-2 bg-white border-2 rounded-lg cursor-pointer transition-all h-12 text-gray-500
-          ${variant === 'danger' ? 'border-red-500' : 'border-gray-300 hover:border-gray-500'}
+          ${variant === DropdownVariant.DANGER ? 'border-red-500' : 'border-gray-300 hover:border-gray-500'}
           ${isOpen ? 'border-gray-500 shadow-md' : ''}
         `}
                 onClick={() => setIsOpen(!isOpen)}
@@ -76,7 +62,7 @@ export const Dropdown = ({
             )}
 
             {/* Error label */}
-            {variant === "danger" && (
+            {variant === DropdownVariant.DANGER && (
                 <div className="text-red-500">{errorLabel}</div>
             )}
         </div>

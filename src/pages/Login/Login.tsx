@@ -1,33 +1,47 @@
 import { useState } from "react";
 import { TextFieldVariant } from "../../components/atoms/Textfield";
-import { ActionBtn } from "../../components/atoms/actionBtn";
+import { ActionBtn } from "../../components/atoms/ActionBtn/ActionBtn";
 import { TextField } from "../../components/atoms/Textfield";
 import { useNavigate } from "react-router";
-import { loginApi } from "../../api/loginApi";
+import { useSessionStore } from "../../stores/sessionStore/sessionStore";
+import { ActionBtnVariant } from "../../components/atoms/ActionBtn/ActionBtn.type";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const setLoggedIn = useSessionStore((s) => s.setIsLoggedIn);
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        setLoading(true);
-        setError("");
-        console.log("test")
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
 
         try {
-            const result = loginApi(email, password);
-            if (result.status !== 200) {
-                throw new Error(result.result.message);
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ body: { email, password } }), // Nest the credentials
+            });
+
+            const data = await res.json();
+
+            if (res.status === 200) {
+                const { accessToken, expiresIn } = data.result.data;
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('expiresIn', expiresIn.toString());
+                setLoggedIn(true)
+                navigate('/dashboard');
+            } else {
+                setError(data.message || 'Invalid credentials');
             }
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
+        } catch (err) {
+            console.error(err);
+            setError('Something went wrong. Please try again.');
         }
     };
+
 
     return (
         <div className="bg-[#f0f0f5] min-h-screen flex flex-col justify-center items-center">
@@ -60,9 +74,9 @@ export const Login = () => {
                     <div className="flex justify-center mt-4">
                         <ActionBtn
                             label="Login"
-                            variant="secondary"
+                            variant={ActionBtnVariant.SECONDARY}
                             width="[100px]"
-                            onClick={() => handleLogin()}
+                            onClick={handleLogin}
                         />
                     </div>
                 </div>

@@ -1,14 +1,8 @@
-import { ActionBtn } from '../atoms/actionBtn';
-import { IconBtn } from '../atoms/iconBtn';
-import moonIcon from '../../assets/moon.png';
-
-interface SideBarProps {
-    isOpen: boolean;
-    onClose: () => void;
-    CreateOnClick: () => void;
-    setIsDarkMode: (value: boolean) => void;
-    isDarkMode: boolean;
-}
+import { ActionBtn } from '../../atoms/ActionBtn/ActionBtn';
+import { IconBtn } from '../../atoms/IconBtn/iconBtn';
+import moonIcon from '../../../assets/moon.png';
+import { SideBarProps } from './SideBar.type';
+import { ActionBtnVariant } from '../../atoms/ActionBtn/ActionBtn.type';
 
 export const SideBar = ({
     isOpen,
@@ -49,7 +43,7 @@ export const SideBar = ({
                         <li>
                             <ActionBtn
                                 label='Create User'
-                                variant='primary'
+                                variant={ActionBtnVariant.SECONDARY}
                                 onClick={() => {
                                     CreateOnClick();
                                     onClose();
@@ -60,7 +54,7 @@ export const SideBar = ({
                         <li>
                             <ActionBtn
                                 label="Logout"
-                                variant='danger'
+                                variant={ActionBtnVariant.DANGER}
                                 width='full'
                             />
                         </li>

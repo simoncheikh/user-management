@@ -1,14 +1,6 @@
-import { useState } from 'react';
+import { Props } from "./IconBtn.type";
 
-
-interface Props {
-    img: string,
-    isDarkMode?: boolean,
-    setIsDarkMode?: (value: boolean) => void
-    onClick?: () => void
-}
-
-export const IconBtn = ({ img, isDarkMode = false, setIsDarkMode, onClick }: Props) => {
+export const IconBtn = ({ img, onClick }: Props) => {
 
     return (
         <button

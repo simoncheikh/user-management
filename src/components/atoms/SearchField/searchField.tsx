@@ -1,6 +1,4 @@
-interface SearchFieldProps {
-  onSearchChange: (searchTerm: string) => void;
-}
+import { SearchFieldProps } from "./SearchField.type";
 
 export const SearchField = ({ onSearchChange }: SearchFieldProps) => {
   return (

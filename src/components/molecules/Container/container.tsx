@@ -1,35 +1,19 @@
 import { useState } from "react"
-import { ActionBtn } from "../atoms/actionBtn"
-import { TextField } from "../atoms/Textfield/Textfield"
-import { Dropdown } from "../atoms/dropdown";
+import { ActionBtn } from "../../atoms/ActionBtn/ActionBtn"
+import { TextField } from "../../atoms/Textfield/Textfield"
+import { Dropdown } from "../../atoms/Dropdown/dropdown";
+import { TextFieldVariant } from "../../atoms/Textfield";
+import { ActionBtnVariant } from "../../atoms/ActionBtn/ActionBtn.type";
+import { ContainerProps } from "./Container.type";
 
-interface Props {
-    cancelOnClick: () => void;
-    onSubmit: (userData: {
-        firstName: string;
-        lastName: string;
-        status: string;
-        email: string;
-        birthDate: string;
-    }) => void;
-    initialValues?: {
-        firstName: string;
-        lastName: string;
-        status: string;
-        email: string;
-        birthDate: string;
-    };
-    label?: string;
-}
-
-export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Create New User" }: Props) => {
+export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Create New User" }: ContainerProps) => {
     const [formData, setFormData] = useState(
         initialValues || {
             firstName: '',
             lastName: '',
             status: 'active',
             email: '',
-            birthDate: ''
+            dateOfBirth: ''
         }
     );
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -52,10 +36,10 @@ export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Cre
 
         if (!formData.status.trim()) newErrors.status = "Status is required";
 
-        if (!formData.birthDate.trim()) {
-            newErrors.birthDate = "Birthdate is required";
-        } else if (!dateRegex.test(formData.birthDate)) {
-            newErrors.birthDate = "Invalid date format (YYYY-MM-DD)";
+        if (!formData.dateOfBirth.trim()) {
+            newErrors.dateOfBirth = "Birthdate is required";
+        } else if (!dateRegex.test(formData.dateOfBirth)) {
+            newErrors.dateOfBirth = "Invalid date format (YYYY-MM-DD)";
         }
 
         setErrors(newErrors);
@@ -66,12 +50,23 @@ export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Cre
 
 
     //this function handling the Change of textfield, it takes the name as a key in textfield like firstname and the prop value is the new value of the key(name)
-    const handleChange = ({ name, value }: { name: string; value: string }) => {
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement> | { name: string; value: string }) => {
+        if ('name' in event) {
+            const { name, value } = event;
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+        } else {
+            // This is the ChangeEvent from TextField input
+            const { name, value } = event.target;
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -79,14 +74,14 @@ export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Cre
                 <div className='text-[30px]'>{label}</div>
 
                 <TextField
-                    variant={errors.firstName ? "danger" : "primary"}
+                    variant={errors.firstName ? TextFieldVariant.DANGER : TextFieldVariant.PRIMARY}
                     name="firstName"
                     placeHolder="First Name"
                     onChange={handleChange}
                     value={formData.firstName}
                     errorLabel={errors.firstName}
                 />
-                <TextField name="lastName" errorLabel={errors.lastName} variant={errors.lastName ? "danger" : "primary"} placeHolder="Last Name" onChange={handleChange} value={formData.lastName} />
+                <TextField name="lastName" errorLabel={errors.lastName} variant={errors.lastName ? TextFieldVariant.DANGER : TextFieldVariant.PRIMARY} placeHolder="Last Name" onChange={handleChange} value={formData.lastName} />
                 <Dropdown
                     items={[
                         { id: 1, label: 'Active', value: 'active' },
@@ -98,20 +93,20 @@ export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Cre
                         handleChange({ name: "status", value: item.label })
                     }
                 />
-                <TextField name="email" errorLabel={errors.email} variant={errors.email ? "danger" : "primary"} placeHolder="Email" onChange={handleChange} value={formData.email} />
-                <TextField name="birthDate" errorLabel={errors.birthDate} variant={errors.birthDate ? "danger" : "primary"} placeHolder="Date of Birth" onChange={handleChange} value={formData.birthDate} />
+                <TextField name="email" errorLabel={errors.email} variant={errors.email ? TextFieldVariant.DANGER : TextFieldVariant.PRIMARY} placeHolder="Email" onChange={handleChange} value={formData.email} />
+                <TextField name="dateOfBirth" errorLabel={errors.dateOfBirth} variant={errors.dateOfBirth ? TextFieldVariant.DANGER : TextFieldVariant.PRIMARY} placeHolder="Date of Birth" onChange={handleChange} value={formData.dateOfBirth} />
 
                 <div className="flex flex-row gap-5 items-end justify-end">
                     <ActionBtn
                         label="Submit"
-                        variant="secondary"
+                        variant={ActionBtnVariant.SECONDARY}
                         onClick={() => {
                             if (validateForm()) {
                                 onSubmit(formData);
                             }
                         }}
                     />
-                    <ActionBtn label="Cancel" variant="danger" onClick={cancelOnClick} />
+                    <ActionBtn label="Cancel" variant={ActionBtnVariant.DANGER} onClick={cancelOnClick} />
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@ import {
 import { routeNames } from "../constants/routeNames";
 import { AuthenticationRoute } from "./AuthenticationRoute";
 import { ProtectedRoute } from "./ProtectedRoute";
+import Layout from "../components/layout/Layout";
 
 
 const LoginPage = React.lazy(() =>
@@ -18,7 +19,7 @@ const LoginPage = React.lazy(() =>
   }))
 );
 const Dashboard = React.lazy(() =>
-  import("../pages/userManagement").then((module) => ({
+  import("../pages/userManagement/userManagement").then((module) => ({
     default: module.UserManagement,
   }))
 );
@@ -28,18 +29,24 @@ export const Routes = () => {
     return createBrowserRouter(
       createRoutesFromElements(
         <Route errorElement={<></>}>
-          <AuthenticationRoute>
-            <Route
-              path={routeNames.login}
-              element={<LoginPage />}
-            />
-          </AuthenticationRoute>
-          <ProtectedRoute>
+          <Route
+            path={routeNames.login}
+            element={
+              <AuthenticationRoute>
+                <LoginPage />
+              </AuthenticationRoute>
+            }
+          />
+          <Route element={<Layout />}>
             <Route
               path={routeNames.dashboard}
-              element={<Dashboard />}
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
             />
-          </ProtectedRoute>
+          </Route>
         </Route >
       )
     );

@@ -1,20 +1,17 @@
-import '../../styles/components/layout/topBar.module.css';
-import { ActionBtn } from '../atoms/actionBtn';
-import { IconBtn } from '../atoms/iconBtn';
-import moonIcon from '../../assets/moon.png';
+import { ActionBtn } from '../../atoms/ActionBtn/ActionBtn';
+import { IconBtn } from '../../atoms/IconBtn/iconBtn';
+import moonIcon from '../../../assets/moon.png';
 import { useState } from 'react';
-import { SideBar } from './sideBar';
-import menuIcon from '../../assets/menu.png';
+import { SideBar } from '../SideBar/sideBar';
+import menuIcon from '../../../assets/menu.png';
+import { useSessionStore } from '../../../stores/sessionStore/sessionStore';
+import { ActionBtnVariant } from '../../atoms/ActionBtn/ActionBtn.type';
+import { NavBarProps } from './NavBar.type';
 
-interface Props {
-    CreateOnClick: () => void;
-    setIsDarkMode: (value: boolean) => void;
-    isDarkMode: boolean;
-}
 
-export const NavBar = ({ CreateOnClick, setIsDarkMode, isDarkMode = true }: Props) => {
+export const NavBar = ({ CreateOnClick, setIsDarkMode, isDarkMode = true }: NavBarProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    const setLoggedIn = useSessionStore((s) => s.setIsLoggedIn)
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     return (
@@ -31,8 +28,8 @@ export const NavBar = ({ CreateOnClick, setIsDarkMode, isDarkMode = true }: Prop
                 </div>
 
                 <div className='hidden sm:flex gap-5'>
-                    <ActionBtn label='Create User' variant='primary' onClick={CreateOnClick} />
-                    <ActionBtn label="Logout" variant='danger' />
+                    <ActionBtn label='Create User' variant={ActionBtnVariant.PRIMARY} onClick={CreateOnClick} />
+                    <ActionBtn label="Logout" variant={ActionBtnVariant.DANGER} onClick={() => setLoggedIn(false)} />
                     <IconBtn img={moonIcon} onClick={() => setIsDarkMode(!isDarkMode)} />
                 </div>
             </div>

@@ -1,15 +1,10 @@
-interface Props {
-    label: string;
-    variant: "primary" | "secondary" | "danger";
-    onClick?: () => void;
-    paddingY?: string
-    width?: string
-}
+import { ActionBtnVariant, ActionBtnProps } from "./ActionBtn.type";
 
-export const ActionBtn = ({ label, variant, onClick, paddingY, width }: Props) => {
+
+export const ActionBtn = ({ label, variant, onClick, paddingY, width }: ActionBtnProps) => {
     const baseClasses = `w-${width} py-${paddingY} p-[10px] rounded-[5px] text-[15px] font-semibold cursor-pointer transition-colors duration-200`;
     const variantClasses = {
-        primary: `
+        [ActionBtnVariant.PRIMARY]: `
           bg-white 
           text-primary 
           border border-gray-200 
@@ -17,12 +12,12 @@ export const ActionBtn = ({ label, variant, onClick, paddingY, width }: Props) =
           hover:border-gray-300 
           active:bg-gray-100
         `,
-        secondary: `
+        [ActionBtnVariant.SECONDARY]: `
          bg-primary
          text-white
          hover:bg-primary-darker
         `,
-        danger: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800"
+        [ActionBtnVariant.DANGER]: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800"
     };
 
     return (

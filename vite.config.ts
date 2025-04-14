@@ -6,10 +6,10 @@ import { viteMockServe } from 'vite-plugin-mock'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    tailwindcss(),
     react(),
+    tailwindcss(),
     viteMockServe({
-      mockPath: 'mock',
-      enable: true
-    })],
+      mockPath: 'src/mock',
+      enable: true,
+    }),],
 })
