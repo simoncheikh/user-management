@@ -1,3 +1,5 @@
+type HtmlTextfieldProps = React.InputHTMLAttributes<HTMLInputElement>;
+
 export interface SearchFieldProps {
-    onSearchChange: (searchTerm: string) => void;
+    onSearchChange: HtmlTextfieldProps['onChange'];
 }

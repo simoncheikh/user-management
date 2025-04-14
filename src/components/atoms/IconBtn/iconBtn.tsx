@@ -1,6 +1,6 @@
-import { Props } from "./IconBtn.type";
+import { IconButtonProps } from "./IconBtn.type";
 
-export const IconBtn = ({ img, onClick }: Props) => {
+export const IconBtn = ({ img, onClick }: IconButtonProps) => {
 
     return (
         <button

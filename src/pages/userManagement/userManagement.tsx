@@ -4,6 +4,7 @@ import { UserCard } from "../../components/organisms/UserCard/userCard";
 import { Container } from "../../components/molecules/Container/container";
 import { getUsersApi } from "../../api/getUsersApi/getUsersApi";
 import { userData } from "./userManagement.type";
+import { useThemeStore } from "../../stores/themeStore/themeStore";
 
 export const UserManagement = () => {
     const [userData, setUserData] = useState<userData[]>([]);
@@ -13,7 +14,8 @@ export const UserManagement = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editUser, setEditUser] = useState<userData | null>(null);
     const [searchUser, setSearchUser] = useState("");
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const isDarkMode = useThemeStore((s) => s.isDarkMode);
+
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -49,9 +51,9 @@ export const UserManagement = () => {
     // };
 
 
-    const onDeleteUser = (id: number) => {
-        setUserData((prev) => prev.filter((user) => user.id !== id));
-    };
+    // const onDeleteUser = (id: number) => {
+    //     setUserData((prev) => prev.filter((user) => user.id !== id));
+    // };
 
     // const handleEditUser = (updatedUserData: {
     //     firstName: string;
@@ -80,12 +82,12 @@ export const UserManagement = () => {
 
     return (
         <div
-            className={`${isDarkMode ? "bg-gray-700" : "bg-white"
-                } min-h-screen flex flex-col`}
+            className={`${isDarkMode ? "bg-dark" : "bg-white"
+                } dark:bg-dark min-h-screen flex flex-col`}
         >
             <div className="p-[1%] flex flex-col gap-[20px]">
                 <div className="w-[300px]">
-                    <SearchField onSearchChange={setSearchUser} />
+                    <SearchField onSearchChange={(e) => setSearchUser(e.target.value)} />
                 </div>
 
                 {loading && <div>Loading users...</div>}
@@ -102,21 +104,19 @@ export const UserManagement = () => {
                             className="w-full sm:w-[calc(50%-16px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-16px)] min-w-[200px]"
                         >
                             <UserCard
-                                {...value}
+                                onDelete={() => console.log("nothing")} {...value}
                                 dateofBirth={value.dateOfBirth}
                                 onEdit={() => {
                                     setEditUser(value);
                                     setIsEditing(true);
                                     setIsContainerOpen(true);
-                                }}
-                                onDelete={() => onDeleteUser(value.id)}
-                            />
+                                }} />
                         </div>
                     ))}
                 </div>
             </div>
 
-            {isContainerOpen && (
+            {/* {isContainerOpen && (
                 <>
                     <div className="fixed inset-0 bg-gray-800/80 z-40" />
                     <Container
@@ -126,10 +126,11 @@ export const UserManagement = () => {
                             setEditUser(null);
                         }}
                         label={isEditing ? "Edit User" : "Create New User"}
-                        initialValues={editUser || undefined}
-                    />
+                        initialValues={editUser || undefined} onSubmit={function (userData: { firstName: string; lastName: string; status: string; email: string; dateOfBirth: string; }): void {
+                            throw new Error("Function not implemented.");
+                        }} />
                 </>
-            )}
+            )} */}
         </div>
     );
 };

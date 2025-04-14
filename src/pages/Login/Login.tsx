@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { TextFieldVariant } from "../../components/atoms/Textfield";
 import { ActionBtn } from "../../components/atoms/ActionBtn/ActionBtn";
 import { TextField } from "../../components/atoms/Textfield";
@@ -14,34 +14,36 @@ export const Login = () => {
     const setLoggedIn = useSessionStore((s) => s.setIsLoggedIn);
     const navigate = useNavigate();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-
+        setLoading(true);
+    
         try {
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ body: { email, password } }), // Nest the credentials
-            });
-
-            const data = await res.json();
-
-            if (res.status === 200) {
-                const { accessToken, expiresIn } = data.result.data;
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('expiresIn', expiresIn.toString());
-                setLoggedIn(true)
-                navigate('/dashboard');
-            } else {
-                setError(data.message || 'Invalid credentials');
-            }
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ body: { email, password } }),
+          });
+    
+          const data = await res.json();
+    
+          if (res.status === 200) {
+            const { accessToken, expiresIn } = data.result.data;
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('expiresIn', expiresIn.toString());
+            setLoggedIn(true);
+            navigate('/dashboard');
+          } else {
+            setError(data.message || 'Invalid credentials');
+          }
         } catch (err) {
-            console.error(err);
-            setError('Something went wrong. Please try again.');
+          console.error(err);
+          setError('Something went wrong. Please try again.');
+        } finally {
+          setLoading(false);
         }
-    };
-
+      }, [email, password, navigate, setLoggedIn]);
 
     return (
         <div className="bg-[#f0f0f5] min-h-screen flex flex-col justify-center items-center">
@@ -73,7 +75,7 @@ export const Login = () => {
                     )}
                     <div className="flex justify-center mt-4">
                         <ActionBtn
-                            label="Login"
+                            label={loading ? 'Logging in...' : 'Login'}
                             variant={ActionBtnVariant.SECONDARY}
                             width="[100px]"
                             onClick={handleLogin}

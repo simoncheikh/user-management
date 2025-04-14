@@ -1,6 +1,8 @@
-export interface Props {
-    img: string,
-    isDarkMode?: boolean,
-    setIsDarkMode?: (value: boolean) => void
-    onClick?: () => void
+type HtmlButtonProps=React.ButtonHTMLAttributes<HTMLButtonElement>
+
+export interface IconButtonProps {
+    img: string;               
+    isDarkMode?: HtmlButtonProps['disabled'];  
+    setIsDarkMode?: HtmlButtonProps['onChange']; 
+    onClick?:  HtmlButtonProps['onClick']
 }
