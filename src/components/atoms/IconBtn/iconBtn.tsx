@@ -1,6 +1,7 @@
+import React from "react";
 import { IconButtonProps } from "./IconBtn.type";
 
-export const IconBtn = ({ img, onClick }: IconButtonProps) => {
+export const IconBtn: React.FC<IconButtonProps> = React.memo(({ img, onClick }) => {
 
     return (
         <button
@@ -13,4 +14,4 @@ export const IconBtn = ({ img, onClick }: IconButtonProps) => {
             />
         </button>
     );
-};
+});

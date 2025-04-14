@@ -4,9 +4,7 @@ const Layout = () => {
 
     return (
         <div className={`min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200`}>
-            <NavBar CreateOnClick={function (): void {
-                throw new Error("Function not implemented.");
-            }} />
+            <NavBar CreateOnClick={() => console.log("nothing")} />
             <main>
                 <Outlet />
             </main>

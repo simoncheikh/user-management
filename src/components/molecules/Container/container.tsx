@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { ActionBtn } from "../../atoms/ActionBtn/ActionBtn"
 import { TextField } from "../../atoms/Textfield/Textfield"
-import { Dropdown } from "../../atoms/Dropdown/dropdown";
+import { Dropdown } from "../../atoms/Dropdown/Dropdown";
 import { TextFieldVariant } from "../../atoms/Textfield";
 import { ActionBtnVariant } from "../../atoms/ActionBtn/ActionBtn.type";
 import { ContainerProps } from "./Container.type";

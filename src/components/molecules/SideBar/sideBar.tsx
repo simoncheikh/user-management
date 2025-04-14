@@ -5,6 +5,7 @@ import { SideBarProps } from './SideBar.type';
 import { ActionBtnVariant } from '../../atoms/ActionBtn/ActionBtn.type';
 import { useThemeStore } from '../../../stores/themeStore/themeStore';
 import { useSessionStore } from '../../../stores/sessionStore/sessionStore';
+import { useCallback } from 'react';
 
 export const SideBar = ({
     isOpen,
@@ -13,6 +14,10 @@ export const SideBar = ({
 }: SideBarProps) => {
     const toggleDarkMode = useThemeStore((s) => s.toggleDarkMode);
     const setLoggedIn = useSessionStore((s) => s.setIsLoggedIn)
+
+    const handleToggleDarkMode = useCallback(() => {
+        toggleDarkMode();
+    }, [toggleDarkMode]);
 
     return (
         <>
@@ -34,7 +39,7 @@ export const SideBar = ({
                         <h1 className="text-2xl font-bold">Menu</h1>
                     </div>
                     <div>
-                        <IconBtn img={moonIcon} onClick={toggleDarkMode} />
+                        <IconBtn img={moonIcon} onClick={handleToggleDarkMode} />
                     </div>
                 </div>
 

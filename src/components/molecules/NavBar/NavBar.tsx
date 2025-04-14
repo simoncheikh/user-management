@@ -1,8 +1,8 @@
 import { ActionBtn } from '../../atoms/ActionBtn/ActionBtn';
 import { IconBtn } from '../../atoms/IconBtn/iconBtn';
 import moonIcon from '../../../assets/moon.png';
-import { useState } from 'react';
-import { SideBar } from '../SideBar/sideBar';
+import { useCallback, useState } from 'react';
+import { SideBar } from '../SideBar/SideBar';
 import menuIcon from '../../../assets/menu.png';
 import { useSessionStore } from '../../../stores/sessionStore/sessionStore';
 import { useThemeStore } from '../../../stores/themeStore/themeStore';
@@ -15,6 +15,10 @@ export const NavBar = ({ CreateOnClick }: NavBarProps) => {
     const setLoggedIn = useSessionStore((s) => s.setIsLoggedIn)
     const toggleDarkMode = useThemeStore((s) => s.toggleDarkMode);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+    const handleToggleDarkMode = useCallback(() => {
+        toggleDarkMode();
+      }, [toggleDarkMode]);
 
     return (
         <>
@@ -32,7 +36,7 @@ export const NavBar = ({ CreateOnClick }: NavBarProps) => {
                 <div className='hidden sm:flex gap-5'>
                     <ActionBtn label='Create User' variant={ActionBtnVariant.PRIMARY} onClick={CreateOnClick} />
                     <ActionBtn label="Logout" variant={ActionBtnVariant.DANGER} onClick={() => setLoggedIn(false)} />
-                    <IconBtn img={moonIcon} onClick={toggleDarkMode} />
+                    <IconBtn img={moonIcon} onClick={handleToggleDarkMode} />
                 </div>
             </div>
             <div className='sm:hidden'>
