@@ -6,7 +6,7 @@ import { TextFieldVariant } from "../../atoms/Textfield";
 import { ActionBtnVariant } from "../../atoms/ActionBtn/ActionBtn.type";
 import { ContainerProps } from "./Container.type";
 
-export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Create New User" }: ContainerProps) => {
+export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Add New User" }: ContainerProps) => {
     const [formData, setFormData] = useState(
         initialValues || {
             firstName: '',
@@ -70,8 +70,8 @@ export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Cre
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="flex flex-col gap-5 rounded-[20px] bg-white/98 z-50 p-8 border border-primary shadow-xl max-w-md w-full">
-                <div className='text-[30px]'>{label}</div>
+            <div className="flex flex-col gap-5 bg-white/98 z-50 p-8 rounded-[5px] shadow-[2px_2px_6px_2px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] max-w-md w-full">
+                <div className='text-[30px] flex justify-center'>{label}</div>
 
                 <TextField
                     variant={errors.firstName ? TextFieldVariant.DANGER : TextFieldVariant.PRIMARY}
@@ -96,7 +96,7 @@ export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Cre
                 <TextField name="email" errorLabel={errors.email} variant={errors.email ? TextFieldVariant.DANGER : TextFieldVariant.PRIMARY} placeHolder="Email" onChange={handleChange} value={formData.email} />
                 <TextField name="dateOfBirth" errorLabel={errors.dateOfBirth} variant={errors.dateOfBirth ? TextFieldVariant.DANGER : TextFieldVariant.PRIMARY} placeHolder="Date of Birth" onChange={handleChange} value={formData.dateOfBirth} />
 
-                <div className="flex flex-row gap-5 items-end justify-end">
+                <div className="flex flex-row gap-5 items-center justify-center">
                     <ActionBtn
                         label="Submit"
                         variant={ActionBtnVariant.SECONDARY}
@@ -106,7 +106,6 @@ export const Container = ({ cancelOnClick, onSubmit, initialValues, label = "Cre
                             }
                         }}
                     />
-                    <ActionBtn label="Cancel" variant={ActionBtnVariant.DANGER} onClick={cancelOnClick} />
                 </div>
             </div>
         </div>

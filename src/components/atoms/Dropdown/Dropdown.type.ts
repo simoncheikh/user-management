@@ -10,12 +10,16 @@ export interface DropdownItem {
     value: string;
 }
 
-export interface DropdownProps {
-    items?: DropdownItem[];
+export type DropdownProps = {
+    items: DropdownItem[];
     placeholder?: string;
-    onSelect?: (item: DropdownItem) => void;
-    width?: string;
-    variant?: DropdownVariant
+    value?: string; 
+    onChange?: (value: string) => void; 
+    onBlur?: () => void;
+    name?: string;
     errorLabel?: string;
-    value?: string
-}
+    variant?: DropdownVariant;
+    width?: string;
+    onSelect?: (item: DropdownItem) => void; // optional external handler
+  };
+  

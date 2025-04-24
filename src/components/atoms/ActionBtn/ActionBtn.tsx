@@ -2,8 +2,8 @@ import React from "react";
 import { ActionBtnVariant, ActionBtnProps } from "./ActionBtn.type";
 
 
-export const ActionBtn: React.FC<ActionBtnProps> = React.memo(({ label, variant, onClick, paddingY, width }) => {
-    const baseClasses = `w-${width} py-${paddingY} p-[10px] rounded-[5px] text-[15px] font-semibold cursor-pointer transition-colors duration-200`;
+export const ActionBtn: React.FC<ActionBtnProps> = React.memo(({ label, variant, onClick, paddingY, width, type, disabled }) => {
+    const baseClasses = `w-${width} py-${paddingY} p-[10px] rounded-[5px] text-[15px] font-semibold cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-200 transition-colors duration-200`;
     const variantClasses = {
         [ActionBtnVariant.PRIMARY]: `
           bg-white 
@@ -22,7 +22,7 @@ export const ActionBtn: React.FC<ActionBtnProps> = React.memo(({ label, variant,
     };
 
     return (
-        <button className={`${baseClasses} ${variantClasses[variant]}`} onClick={onClick}>
+        <button className={`${baseClasses} ${variantClasses[variant]}`} onClick={onClick} type={type} disabled={disabled}>
             {label}
         </button>
     );

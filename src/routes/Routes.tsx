@@ -24,6 +24,13 @@ const Dashboard = React.lazy(() =>
   }))
 );
 
+const NewUser = React.lazy(() =>
+  import("../pages/CreateUser").then((module) => ({
+    default: module.CreateUser,
+  }))
+
+)
+
 export const Routes = () => {
   const router = useMemo(() => {
     return createBrowserRouter(
@@ -46,6 +53,9 @@ export const Routes = () => {
                 </ProtectedRoute>
               }
             />
+          </Route>
+          <Route element={<Layout />}>
+            <Route element={<NewUser />} path={routeNames.newuser} />
           </Route>
         </Route >
       )

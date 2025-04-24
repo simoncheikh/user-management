@@ -7,9 +7,12 @@ export const Dropdown = ({
     items = [],
     placeholder = "Select an option",
     onSelect,
+    onChange,
+    onBlur,
     width = 'w-full',
     variant,
-    errorLabel, value
+    errorLabel,
+    value
 }: DropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
@@ -18,21 +21,27 @@ export const Dropdown = ({
     useEffect(() => {
         if (value && items.length > 0) {
             const matchedItem = items.find(item => item.value === value);
-            if (matchedItem) {
-                setSelectedItem(matchedItem);
-            }
+            setSelectedItem(matchedItem || null);
+        } else {
+            setSelectedItem(null);
         }
     }, [value, items]);
+
+    useEffect(() => {
+        if (!isOpen && onBlur) {
+            onBlur();
+        }
+    }, [isOpen, onBlur]);
 
     const handleItemClick = (item: DropdownItem) => {
         setSelectedItem(item);
         setIsOpen(false);
-        if (onSelect) onSelect(item);
+        if (onChange) onChange(item.value); 
+        if (onSelect) onSelect(item);       
     };
 
     return (
         <div className={`relative ${width} max-w-md`} ref={dropdownRef}>
-            {/* Dropdown header */}
             <div
                 className={`flex items-center justify-between p-2 bg-white border-2 rounded-lg cursor-pointer transition-all h-12 text-gray-500
           ${variant === DropdownVariant.DANGER ? 'border-red-500' : 'border-gray-300 hover:border-gray-500'}
@@ -44,7 +53,6 @@ export const Dropdown = ({
                 <img className="w-5" src={downIcon} alt="dropdown arrow" />
             </div>
 
-            {/*Dropdown list*/}
             {isOpen && (
                 <div className="absolute w-full max-h-48 overflow-y-auto mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
                     {items.map(item => (
@@ -61,7 +69,6 @@ export const Dropdown = ({
                 </div>
             )}
 
-            {/* Error label */}
             {variant === DropdownVariant.DANGER && (
                 <div className="text-red-500">{errorLabel}</div>
             )}

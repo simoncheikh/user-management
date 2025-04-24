@@ -9,7 +9,8 @@ export interface TextfieldProps {
     onChange?: HtmlTextfieldProps['onChange'];
     placeHolder?: HtmlTextfieldProps['placeholder']
     variant: TextFieldVariant
-    value: HtmlTextfieldProps['value']
+    value?: HtmlTextfieldProps['value']
     errorLabel?: String
-    name: string
+    name?: string
+    type?: HtmlTextfieldProps['type']
 }
