@@ -1,11 +1,10 @@
-import { PropsWithChildren } from "react";
-import { useSessionStore } from "../stores/sessionStore/sessionStore";
-import { Navigate } from "react-router";
+import { JSX } from 'react';
+import { Navigate } from 'react-router';
+import { useSessionStore } from '../stores/sessionStore/sessionStore';
 
-export const AuthenticationRoute: React.FC<PropsWithChildren> = ({ children }) => {
-    const isLoggedIn = useSessionStore((s) => s.isLoggedIn)
-    if (isLoggedIn) {
-        return <Navigate to="/dashboard" />
-    }
-    return children
-}
+export const AuthenticationRoute = ({ children }: { children: JSX.Element }) => {
+  const isAuthenticated = useSessionStore((state) => state.isAuthenticated());
+
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : children;
+};
+

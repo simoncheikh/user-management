@@ -11,7 +11,8 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const setLoggedIn = useSessionStore((s) => s.setIsLoggedIn);
+
+  const setSession = useSessionStore((s: any) => s.setSession);
   const navigate = useNavigate();
 
   const handleLogin = useCallback(async (e: React.FormEvent) => {
@@ -30,41 +31,36 @@ export const Login = () => {
 
       if (res.status === 200) {
         const { accessToken, expiresIn } = data.result.data;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('expiresIn', expiresIn.toString());
-        setLoggedIn(true);
+        setSession(accessToken, expiresIn);
         navigate('/dashboard');
       } else {
         setError(data.message || 'Invalid credentials');
       }
     } catch (err) {
       console.error(err);
-      setError('Fill required fields');
+      setError('Something went wrong.');
     } finally {
       setLoading(false);
     }
-  }, [email, password, navigate, setLoggedIn]);
+  }, [email, password, navigate, setSession]);
 
   return (
     <div className="bg-[#f0f0f5] min-h-screen flex flex-col justify-center items-center">
       <div className="bg-white p-[2%] rounded-xl w-[25%] shadow-[2px_2px_6px_2px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]">
         <div className="font-bold flex justify-center text-[25px]">Login</div>
-        <div className="flex flex-col justify-center gap-[10px]">
-          <div className="text-[15px] text-gray-400">
-            Email
-          </div>
+        <form onSubmit={handleLogin} className="flex flex-col justify-center gap-[10px]">
+          <label className="text-[15px] text-gray-400">Email</label>
           <TextField
             name="email"
             variant={TextFieldVariant.PRIMARY}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <div className="text-[15px] text-gray-400">
-            Password
-          </div>
+          <label className="text-[15px] text-gray-400">Password</label>
           <TextField
             name="password"
             variant={TextFieldVariant.PRIMARY}
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -78,11 +74,11 @@ export const Login = () => {
               label={loading ? 'Logging in...' : 'Login'}
               variant={ActionBtnVariant.SECONDARY}
               width="[100px]"
-              onClick={handleLogin}
+              type="submit"
             />
           </div>
-        </div>
+        </form>
       </div>
     </div>
-  )
+  );
 }

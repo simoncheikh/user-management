@@ -1,18 +1,6 @@
+import { userData } from "../userManagement/userManagement.type";
+
+
 export interface CreateUserProps {
-    cancelOnClick: () => void;
-    onSubmit: (userData: {
-        firstName: string;
-        lastName: string;
-        status: string;
-        email: string;
-        dateOfBirth: string;
-    }) => void;
-    initialValues?: {
-        firstName: string;
-        lastName: string;
-        status: string;
-        email: string;
-        dateOfBirth: string;
-    };
-    label?: string;
+    user?: userData | null
 }
