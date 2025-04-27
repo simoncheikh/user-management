@@ -2,7 +2,6 @@ import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/src/zod.js";
 import { z } from "zod";
 import { QueryKeys } from "../../../constants/query-keys";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
 import { ActionBtn } from "../../../components/atoms/ActionBtn/ActionBtn";
@@ -16,6 +15,7 @@ import { useCallback } from "react";
 import dayjs from "dayjs";
 import { createUsersApi } from "../../../api/users/createUsersApi";
 import { editUserApi } from "../../../api/users/editUsersApi";
+import { LoadingPage } from "../Loading/LoadingPage";
 
 
 
@@ -27,17 +27,22 @@ const schema = z
         status: z.enum(["active", "locked"], {
             errorMap: () => ({ message: "Status is required" }),
         }),
-        dateOfBirth: z.coerce.date()
-            .refine(date => date <= new Date(), {
-                message: "Date of birth cannot be in the future"
+        dateOfBirth: z.string()
+            .min(1, "Date of birth is required")
+            .refine(date => {
+                const parsedDate = new Date(date);
+                return !isNaN(parsedDate.getTime()) && parsedDate <= new Date();
+            }, {
+                message: "Date of birth cannot be in the future",
             })
             .refine(date => {
+                const parsedDate = new Date(date);
                 const minDate = new Date();
                 minDate.setFullYear(minDate.getFullYear() - 120);
-                return date >= minDate;
+                return parsedDate >= minDate;
             }, {
-                message: "Age must be less than 120 years"
-            }),
+                message: "Age must be less than 120 years",
+            })
     })
 
 type FormData = z.infer<typeof schema>;
@@ -47,7 +52,7 @@ type FormData = z.infer<typeof schema>;
 export const ManageForm = ({ user, isEdited }: ManageUserProps) => {
 
     const location = useLocation()
-    const { userId } = location.state || {}
+    const { userId, value } = location.state || {}
     const queryClient = useQueryClient()
     const navigate = useNavigate();
 
@@ -65,31 +70,33 @@ export const ManageForm = ({ user, isEdited }: ManageUserProps) => {
     function onSuccess() {
         navigate("/dashboard");
 
-        queryClient.invalidateQueries({ queryKey: [QueryKeys.USERS] });
-        queryClient.invalidateQueries({ queryKey: [QueryKeys.USERS_PAGINATED] });
+        queryClient.invalidateQueries({ queryKey: ["users"] });
 
         if (user?.id) {
-            queryClient.invalidateQueries({ queryKey: [QueryKeys.USER, user.id] });
+            queryClient.invalidateQueries({ queryKey: ["users", user.id] });
         }
     }
+
+    const defaultValues = value ? {
+        firstName: value.firstName,
+        lastName: value.lastName,
+        email: value.email,
+        status: value.status as "active" | "locked",
+        dateOfBirth: value?.dateOfBirth
+            ? new Date(value.dateOfBirth).toISOString().split('T')[0]
+            : new Date().toISOString().split('T')[0],
+    } : {};
 
     const {
         register,
         handleSubmit,
         control,
-        formState: { errors, isValid, isSubmitting },
+        formState: { errors, isValid, isSubmitting, isLoading },
     } = useForm<FormData>({
         resolver: zodResolver(schema),
         mode: "onChange",
-        defaultValues: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            status: undefined,
-            dateOfBirth: new Date()
-        },
+        defaultValues,
     });
-
     const {
         field: statusField
     } = useController({
@@ -116,10 +123,16 @@ export const ManageForm = ({ user, isEdited }: ManageUserProps) => {
             status,
             dateOfBirth: dayjs(dateOfBirth).format("YYYY-MM-DD"),
         });
-    }, [isEdited, user?.id, createUsersMutation, editUsersMutation]);
+    }, [isEdited, createUsersMutation, editUsersMutation]);
+
+    const isSubmittingForm = createUsersMutation.isPending || editUsersMutation.isPending;
+
+    if (isSubmittingForm) {
+        return <LoadingPage label={isEdited ? "Updating User..." : "Creating User..."} />;
+    }
 
     return (
-        <form className="fixed inset-0 flex items-center justify-center z-50" onSubmit={handleSubmit(onSubmit)}>
+        <form className="fixed inset-0 flex items-center justify-center z-50 dark:bg-dark" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-2 bg-white/98 z-50 p-8 rounded-[5px] shadow-[2px_2px_6px_2px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] max-w-md w-full">
                 <div className='text-[30px] flex justify-center'>{isEdited == true ? "Update User" : "Add New User"}</div>
 

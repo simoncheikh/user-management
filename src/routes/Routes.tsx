@@ -10,6 +10,7 @@ import { routeNames } from "../constants/routeNames";
 import { AuthenticationRoute } from "./AuthenticationRoute";
 import { ProtectedRoute } from "./ProtectedRoute";
 import Layout from "../components/layout/Layout";
+import { LoadingPage } from "../components/molecules/Loading/LoadingPage";
 
 // Lazy-loaded components
 const LoginPage = React.lazy(() =>
@@ -74,7 +75,7 @@ export const Routes = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense>
         <RouterProvider router={router} />
       </Suspense>
     </QueryClientProvider>

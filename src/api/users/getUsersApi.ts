@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useSessionStore } from '../../stores/sessionStore/sessionStore';
 
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;

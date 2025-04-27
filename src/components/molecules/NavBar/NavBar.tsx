@@ -8,17 +8,19 @@ import { useSessionStore } from '../../../stores/sessionStore/sessionStore';
 import { useThemeStore } from '../../../stores/themeStore/themeStore';
 import { ActionBtnVariant } from '../../atoms/ActionBtn/ActionBtn.type';
 import { NavBarProps } from './NavBar.type';
+import { useNavigate } from 'react-router';
 
 
 export const NavBar = ({ CreateOnClick }: NavBarProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const setLoggedIn = useSessionStore((s) => s.setIsLoggedIn)
+    const clearSession = useSessionStore((s) => s.clearSession)
     const toggleDarkMode = useThemeStore((s) => s.toggleDarkMode);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+    const navigate = useNavigate()
 
     const handleToggleDarkMode = useCallback(() => {
         toggleDarkMode();
-      }, [toggleDarkMode]);
+    }, [toggleDarkMode]);
 
     return (
         <>
@@ -34,8 +36,8 @@ export const NavBar = ({ CreateOnClick }: NavBarProps) => {
                 </div>
 
                 <div className='hidden sm:flex gap-5'>
-                    <ActionBtn label='Create User' variant={ActionBtnVariant.PRIMARY} onClick={CreateOnClick} />
-                    <ActionBtn label="Logout" variant={ActionBtnVariant.DANGER} onClick={() => setLoggedIn(false)} />
+                    <ActionBtn label='Create User' variant={ActionBtnVariant.PRIMARY} onClick={() => navigate("/dashboard/new")} />
+                    <ActionBtn label="Logout" variant={ActionBtnVariant.DANGER} onClick={() => clearSession()} />
                     <IconBtn img={moonIcon} onClick={handleToggleDarkMode} />
                 </div>
             </div>

@@ -2,7 +2,7 @@ import { useSessionStore } from '../../stores/sessionStore/sessionStore';
 import { instance } from '../config';
 import { AxiosError } from 'axios';
 
-export interface EditUserPayload {
+interface EditUserPayload {
     id: any;
     firstName: string;
     lastName: string;
@@ -11,12 +11,13 @@ export interface EditUserPayload {
     dateOfBirth: string;
 }
 
-export const editUserApi = async ({ id, firstName, lastName, status, dateOfBirth }: EditUserPayload) => {
+export const editUserApi = async ({ id, firstName,email, lastName, status, dateOfBirth }: EditUserPayload) => {
     const token = useSessionStore.getState().accessToken;
 
     try {
         const response = await instance.put(`/api/users/${id}`, {
             firstName,
+            email,
             lastName,
             status,
             dateOfBirth

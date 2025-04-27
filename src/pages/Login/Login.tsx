@@ -5,47 +5,45 @@ import { TextField } from "../../components/atoms/Textfield";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "../../stores/sessionStore/sessionStore";
 import { ActionBtnVariant } from "../../components/atoms/ActionBtn/ActionBtn.type";
+import { useMutation } from "@tanstack/react-query";
+import { loginApi } from "../../api/login/loginApi";
+import { LoadingPage } from "../../components/molecules/Loading/LoadingPage";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const setSession = useSessionStore((s: any) => s.setSession);
   const navigate = useNavigate();
 
-  const handleLogin = useCallback(async (e: React.FormEvent) => {
+  const { mutate: login, isPending } = useMutation({
+    mutationFn: loginApi,
+    onSuccess: (data) => {
+      const { accessToken, expiresIn } = data;
+      setSession(accessToken, expiresIn);
+      navigate('/dashboard');
+    },
+    onError: (error: any) => {
+      setError(error.message || 'Something went wrong.');
+    },
+  });
+
+  const handleLogin = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    login({ email, password });
+  }, [email, password, login]);
 
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+  const isPageLoading = isPending
 
-      const data = await res.json();
+  if (isPageLoading) {
+    return <LoadingPage label={"Logging in"} />;
+  }
 
-      if (res.status === 200) {
-        const { accessToken, expiresIn } = data.result.data;
-        setSession(accessToken, expiresIn);
-        navigate('/dashboard');
-      } else {
-        setError(data.message || 'Invalid credentials');
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Something went wrong.');
-    } finally {
-      setLoading(false);
-    }
-  }, [email, password, navigate, setSession]);
 
   return (
-    <div className="bg-[#f0f0f5] min-h-screen flex flex-col justify-center items-center">
+    <div className="bg-[#f0f0f5] dark:bg-dark min-h-screen flex flex-col justify-center items-center">
       <div className="bg-white p-[2%] rounded-xl w-[25%] shadow-[2px_2px_6px_2px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]">
         <div className="font-bold flex justify-center text-[25px]">Login</div>
         <form onSubmit={handleLogin} className="flex flex-col justify-center gap-[10px]">
@@ -71,7 +69,7 @@ export const Login = () => {
           )}
           <div className="flex justify-center mt-4">
             <ActionBtn
-              label={loading ? 'Logging in...' : 'Login'}
+              label={isPending ? 'Logging in...' : 'Login'}
               variant={ActionBtnVariant.SECONDARY}
               width="[100px]"
               type="submit"
