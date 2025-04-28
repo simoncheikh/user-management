@@ -4,7 +4,7 @@ const Layout = () => {
 
     return (
         <div className={`min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200`}>
-            <NavBar CreateOnClick={() => console.log("nothing")} />
+            <NavBar  />
             <main>
                 <Outlet />
             </main>

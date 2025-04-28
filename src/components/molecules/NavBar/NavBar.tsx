@@ -1,26 +1,43 @@
+import { useEffect, useState } from 'react';
 import { ActionBtn } from '../../atoms/ActionBtn/ActionBtn';
 import { IconBtn } from '../../atoms/IconBtn/iconBtn';
 import moonIcon from '../../../assets/moon.png';
-import { useCallback, useState } from 'react';
 import { SideBar } from '../SideBar/SideBar';
 import menuIcon from '../../../assets/menu.png';
 import { useSessionStore } from '../../../stores/sessionStore/sessionStore';
 import { useThemeStore } from '../../../stores/themeStore/themeStore';
 import { ActionBtnVariant } from '../../atoms/ActionBtn/ActionBtn.type';
 import { NavBarProps } from './NavBar.type';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
+import { showToast } from '../../atoms/Toast/toast';
 
-
-export const NavBar = ({ CreateOnClick }: NavBarProps) => {
+export const NavBar = ({ notification, setNotification, CreateOnClick }: NavBarProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const clearSession = useSessionStore((s) => s.clearSession)
+    const clearSession = useSessionStore((s) => s.clearSession);
     const toggleDarkMode = useThemeStore((s) => s.toggleDarkMode);
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const handleToggleDarkMode = useCallback(() => {
+    const handleToggleDarkMode = () => {
         toggleDarkMode();
-    }, [toggleDarkMode]);
+        showToast(`Dark mode ${useThemeStore.getState().isDarkMode ? 'disabled' : 'enabled'}`);
+    };
+
+    const handleLogout = () => {
+        clearSession();
+        showToast('Logged out successfully');
+        navigate('/login');
+    };
+
+    const isDashboardNew = location.pathname === '/dashboard/new' || location.pathname.startsWith('/dashboard/edit/');
+
+    useEffect(() => {
+        if (notification) {
+            showToast(notification.message, notification.type);
+            setNotification(null);
+        }
+    }, [notification, setNotification]);
 
     return (
         <>
@@ -32,15 +49,28 @@ export const NavBar = ({ CreateOnClick }: NavBarProps) => {
                             onClick={toggleSidebar}
                         />
                     </div>
-                    <div className='text-[30px]'>User Management</div>
+                    <div className='text-[30px]'>
+                        {isDashboardNew
+                            ? location.pathname === '/dashboard/new'
+                                ? "Create User"
+                                : "Update User"
+                            : "User Management"}
+                    </div>
                 </div>
 
                 <div className='hidden sm:flex gap-5'>
-                    <ActionBtn label='Create User' variant={ActionBtnVariant.PRIMARY} onClick={() => navigate("/dashboard/new")} />
-                    <ActionBtn label="Logout" variant={ActionBtnVariant.DANGER} onClick={() => clearSession()} />
+                    {isDashboardNew ? null : (
+                        <ActionBtn
+                            label='Create User'
+                            variant={ActionBtnVariant.PRIMARY}
+                            onClick={() => navigate("/dashboard/new")}
+                        />
+                    )}
+                    <ActionBtn label="Logout" variant={ActionBtnVariant.DANGER} onClick={handleLogout} />
                     <IconBtn img={moonIcon} onClick={handleToggleDarkMode} />
                 </div>
             </div>
+
             <div className='sm:hidden'>
                 <SideBar
                     isOpen={isSidebarOpen}

@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { Routes } from "./routes/Routes";
 import { useThemeStore } from "./stores/themeStore/themeStore";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
 
 function App() {
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
@@ -13,7 +15,12 @@ function App() {
     }
   }, [isDarkMode]);
 
-  return <Routes />;
+  return (
+    <>
+      <Routes />
+      <ToastContainer />
+    </>
+  );
 }
 
 export default App;

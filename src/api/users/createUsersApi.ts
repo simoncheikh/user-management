@@ -1,5 +1,6 @@
 import { useSessionStore } from '../../stores/sessionStore/sessionStore';
 import { instance } from '../config';
+import { showToast } from '../../components/atoms/Toast/toast';
 
 export interface CreateUserPayload {
   firstName: string;
@@ -10,13 +11,22 @@ export interface CreateUserPayload {
 }
 
 export const createUsersApi = async (data: CreateUserPayload): Promise<void> => {
-  const token = useSessionStore.getState().accessToken
+  const token = useSessionStore.getState().accessToken;
 
-  const response = await instance.post("/api/users", data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const response = await instance.post("/api/users", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  return response.data;
+    showToast('User created successfully!', 'success');
+    return response.data;
+  } catch (error: any) {
+    showToast(
+      error.response?.data?.message || 'Failed to create user',
+      'error'
+    );
+    throw error;
+  }
 };

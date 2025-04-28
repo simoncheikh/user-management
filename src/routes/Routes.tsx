@@ -6,11 +6,11 @@ import {
   createRoutesFromElements,
 } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { routeNames } from "../constants/routeNames";
 import { AuthenticationRoute } from "./AuthenticationRoute";
 import { ProtectedRoute } from "./ProtectedRoute";
 import Layout from "../components/layout/Layout";
-import { LoadingPage } from "../components/molecules/Loading/LoadingPage";
 
 // Lazy-loaded components
 const LoginPage = React.lazy(() =>
@@ -62,11 +62,11 @@ export const Routes = () => {
               }
             />
           </Route>
-          <Route element={<Layout />}>
+          <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route element={<NewUser />} path={routeNames.newuser} />
           </Route>
           <Route element={<Layout />}>
-            <Route element={<EditUser />} path={routeNames.edituser} />
+            <Route element={<ProtectedRoute><EditUser /></ProtectedRoute>} path={routeNames.edituser} />
           </Route>
         </Route>
       )
@@ -78,6 +78,7 @@ export const Routes = () => {
       <Suspense>
         <RouterProvider router={router} />
       </Suspense>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

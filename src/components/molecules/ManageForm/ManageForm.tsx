@@ -1,7 +1,6 @@
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/src/zod.js";
 import { z } from "zod";
-import { QueryKeys } from "../../../constants/query-keys";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
 import { ActionBtn } from "../../../components/atoms/ActionBtn/ActionBtn";
@@ -132,7 +131,7 @@ export const ManageForm = ({ user, isEdited }: ManageUserProps) => {
     }
 
     return (
-        <form className="fixed inset-0 flex items-center justify-center z-50 dark:bg-dark" onSubmit={handleSubmit(onSubmit)}>
+        <form className="inset-0 flex items-center min-h-[90vh] justify-center z-50 dark:bg-dark" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-2 bg-white/98 z-50 p-8 rounded-[5px] shadow-[2px_2px_6px_2px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] max-w-md w-full">
                 <div className='text-[30px] flex justify-center'>{isEdited == true ? "Update User" : "Add New User"}</div>
 
